@@ -38,6 +38,8 @@ map.dragRotate.enable();
 
 // ---------- dados de pontos (GeoJSON, desenhados na GPU) ----------
 let pontos = []; // {lng, lat, placa, especie}
+let pontosSaoTeste = true; // pontos gerados (não importados) → podem ser movidos pro GPS
+let primeiraLoc = true;
 const fc = () => ({
   type: "FeatureCollection",
   features: pontos.map((p, i) => ({
@@ -91,7 +93,14 @@ map.on("mouseleave", "pts-c", () => { map.getCanvas().style.cursor = ""; });
 
 // ---------- régua: distância da minha posição até a mira (centro) ----------
 let minhaPos = null; // [lng,lat]
-geo.on("geolocate", (e) => { minhaPos = [e.coords.longitude, e.coords.latitude]; atualizarLeitura(); });
+geo.on("geolocate", (e) => {
+  minhaPos = [e.coords.longitude, e.coords.latitude];
+  // na 1ª localização, joga os pontos de TESTE pra perto de você (se não importou nada)
+  if (primeiraLoc && pontosSaoTeste && pontos.length) {
+    primeiraLoc = false; pontos = []; gerarPontosEm(minhaPos, 1500);
+  }
+  atualizarLeitura();
+});
 function dist(a, b) {
   const R = 6371000, rad = Math.PI / 180;
   const dLat = (b[1] - a[1]) * rad, dLon = (b[0] - a[0]) * rad;
@@ -109,17 +118,19 @@ function atualizarLeitura() {
 map.on("move", atualizarLeitura);
 
 // ---------- gerar / limpar pontos de teste ----------
-function gerarPontos(n) {
-  const c = map.getCenter();
+function gerarPontosEm(centro, n) {
+  const [clng, clat] = centro;
   const base = pontos.length;
+  pontosSaoTeste = true;
   for (let i = 0; i < n; i++) {
-    // cluster gaussiano-ish em volta do centro (~0.5 km)
+    // cluster espiral em volta do centro (~0.5 km)
     const ang = Math.PI * 2 * ((i * 137.5) % 360) / 360;
     const r = (((i * 2654435761) % 1000) / 1000) ** 0.5 * 0.006; // graus
-    pontos.push({ lng: c.lng + Math.cos(ang) * r * 1.6, lat: c.lat + Math.sin(ang) * r, placa: base + i + 1, especie: "" });
+    pontos.push({ lng: clng + Math.cos(ang) * r * 1.6, lat: clat + Math.sin(ang) * r, placa: base + i + 1, especie: "" });
   }
   atualizarPontos();
 }
+function gerarPontos(n) { const c = map.getCenter(); gerarPontosEm([c.lng, c.lat], n); }
 
 // ---------- import KML/KMZ ----------
 function parseKML(txt) {
@@ -181,6 +192,7 @@ document.getElementById("file-kml").onchange = async (ev) => {
     const txt = /\.kmz$/i.test(file.name) ? await kmlDeKMZ(await file.arrayBuffer()) : await file.text();
     const novos = parseKML(txt);
     if (!novos.length) { alert("Não achei pontos nesse arquivo."); ev.target.value = ""; return; }
+    pontosSaoTeste = false; primeiraLoc = false; // importou dados reais → não mexer
     pontos = pontos.concat(novos);
     atualizarPontos();
     // enquadra nos pontos importados

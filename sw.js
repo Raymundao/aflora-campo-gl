@@ -1,5 +1,5 @@
 // SW do protótipo GL. App: rede-primeiro (pega update na hora). Tiles/fontes: cache.
-const CACHE = "aflora-gl-v1";
+const CACHE = "aflora-gl-v2";
 const TILES = "aflora-gl-tiles-v1";
 const ASSETS = [
   "./", "./index.html", "./manifest.webmanifest",
