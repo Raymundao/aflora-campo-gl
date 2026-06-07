@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="Aflora Campo GL — protótipo do mapa com motor GPU (MapLibre).">
+  <title>Aflora Campo GL (teste)</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon.svg">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <meta name="theme-color" content="#1B5E20">
+  <link rel="stylesheet" href="./vendor/maplibre-gl.css">
+  <link rel="stylesheet" href="./css/estilo.css">
+</head>
+<body>
+  <div id="mapa"></div>
+
+  <!-- mira central + leitura de distância -->
+  <div class="mira" id="mira"></div>
+  <div class="leitura" id="leitura" hidden></div>
+
+  <!-- selo -->
+  <div class="selo" id="selo">GL · teste</div>
+
+  <!-- coluna de botões -->
+  <div class="fabs">
+    <button class="fab" id="b-camada" title="Trocar satélite">🛰️</button>
+    <button class="fab ativo" id="b-labels" title="Placas">🏷️</button>
+    <button class="fab" id="b-norte" title="Apontar norte">🧭</button>
+    <button class="fab" id="b-importar" title="Importar KML/KMZ">📂</button>
+    <button class="fab" id="b-gerar" title="Gerar pontos de teste">✨</button>
+    <button class="fab" id="b-limpar" title="Limpar pontos">🗑️</button>
+    <button class="fab" id="b-eu" title="Minha localização">🎯</button>
+  </div>
+
+  <input type="file" id="file-kml" accept=".kml,.kmz,application/vnd.google-earth.kml+xml,application/vnd.google-earth.kmz" hidden>
+
+  <div class="contador" id="contador">0 pontos</div>
+
+  <script src="./vendor/maplibre-gl.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>

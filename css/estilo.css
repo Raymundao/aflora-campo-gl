@@ -1,0 +1,28 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; font-family: system-ui, sans-serif; background: #1b1b1b; }
+#mapa { position: absolute; inset: 0; }
+
+/* mira central (a "ponta" da régua) */
+.mira { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 6;
+  width: 13px; height: 13px; border-radius: 50%; background: #1565C0; border: 2px solid #fff;
+  box-shadow: 0 0 3px rgba(0,0,0,.7); pointer-events: none; }
+.leitura { position: absolute; top: calc(50% + 12px); left: calc(50% + 12px); z-index: 6;
+  background: rgba(0,0,0,.6); color: #fff; padding: 2px 8px; border-radius: 8px; font-size: 15px;
+  font-weight: 700; white-space: nowrap; pointer-events: none; text-shadow: 0 1px 2px rgba(0,0,0,.8); }
+
+.selo { position: absolute; top: max(10px, env(safe-area-inset-top)); left: 12px; z-index: 7;
+  background: rgba(0,0,0,.55); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 10px; }
+
+.fabs { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 7;
+  display: flex; flex-direction: column; gap: 10px; }
+.fab { width: 48px; height: 48px; border-radius: 50%; border: 0; background: rgba(255,255,255,.94);
+  font-size: 22px; box-shadow: 0 2px 6px rgba(0,0,0,.4); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.fab.ativo { background: #1B5E20; }
+
+.contador { position: absolute; left: 12px; bottom: max(14px, env(safe-area-inset-bottom)); z-index: 7;
+  background: rgba(0,0,0,.6); color: #fff; font-size: 13px; font-weight: 700; padding: 5px 10px; border-radius: 10px; }
+
+/* controles do MapLibre um pouco maiores p/ campo */
+.maplibregl-ctrl-group button { width: 40px; height: 40px; }
+.maplibregl-popup-content { font-family: system-ui, sans-serif; font-size: 13px; }
+.maplibregl-popup-content b { color: #1B5E20; }
